@@ -6,143 +6,175 @@ import time
 # Page config
 # ---------------------------
 st.set_page_config(
-    page_title="Alexandria & Simone — Name Gift",
-    page_icon="🎁",
+    page_title="Alexandria — A Regal Name Gift",
+    page_icon="👑",
     layout="centered",
 )
 
 # ---------------------------
-# Data
+# Content (Alexandria only)
 # ---------------------------
-DATA = {
-    "Alexandria": {
-        "emoji": "🛡️",
-        "origin": "Greek (from Alexandros); also famously tied to the ancient city of Alexandria.",
-        "core": "“Defender of people” / “protector of mankind.”",
-        "root": "Greek roots: alexein (“to defend”) + andros (“man/people”).",
-        "vibe": ["Bold", "Visionary", "Protective", "Timeless", "Brilliant"],
-        "more": [
-            "A name associated with strength and guardianship — someone who stands up for others.",
-            "Echoes scholarship and legacy through the city of Alexandria (libraries, learning, history).",
-            "Feels expansive and regal — like someone meant to lead with purpose.",
-            "Carries “builder” energy: creating something that lasts.",
-        ],
-        "gift": "Alexandria — may you always feel protected, powerful, and surrounded by people who see your greatness. 💫",
-        "nicknames": ["Alex", "Lexi", "Andria", "Allie"],
-    },
-    "Simone": {
-        "emoji": "🎶",
-        "origin": "French form of Simon; used widely across cultures.",
-        "core": "Often interpreted as “one who hears” / “listening.”",
-        "root": "From Hebrew Shimon: linked to hearing, listening, and being heard.",
-        "vibe": ["Elegant", "Calm strength", "Creative", "Refined", "Soulful"],
-        "more": [
-            "Quiet power — someone who notices what others miss.",
-            "Artistic, classy feel (often associated with music, poetry, and style).",
-            "Represents wisdom through listening — a presence that makes people feel safe.",
-            "Feels modern but timeless — simple, clean, and memorable.",
-        ],
-        "gift": "Simone — may life always return your kindness, amplify your voice, and honor your peace. ✨",
-        "nicknames": ["Si", "Mona", "Simi"],
-    },
+ALEXANDRIA = {
+    "title": "Alexandria",
+    "tagline": "A regal name. A timeless legacy.",
+    "meaning": "“Defender of people” / “protector of mankind.”",
+    "origin": "Greek (from Alexandros). The name also echoes the historic city of Alexandria — a symbol of knowledge and legacy.",
+    "roots": "Greek roots: alexein (“to defend”) + andros (“man/people”).",
+    "themes": [
+        "Protection & leadership",
+        "Wisdom & scholarship",
+        "Legacy & excellence",
+        "Grace under pressure",
+    ],
+    "vibe_words": ["Regal", "Wise", "Protective", "Magnetic", "Legacy-minded"],
+    "gift_message": (
+        "Alexandria — may your life be crowned with favor, your mind sharpened with wisdom, "
+        "and your path guarded by strength. 👑✨"
+    ),
 }
 
 # ---------------------------
-# Style (colorful UI)
+# Session state
+# ---------------------------
+if "opened" not in st.session_state:
+    st.session_state.opened = False
+
+if "to_name" not in st.session_state:
+    st.session_state.to_name = "Alexandria"
+
+if "from_name" not in st.session_state:
+    st.session_state.from_name = "Desmond"
+
+if "sparkle" not in st.session_state:
+    st.session_state.sparkle = True
+
+
+# ---------------------------
+# Styling (African-themed + regal)
 # ---------------------------
 def inject_css():
     st.markdown(
         """
 <style>
-/* Background */
-.stApp {
+/* Regal African-inspired palette + subtle pattern vibe */
+.stApp{
   background:
-    radial-gradient(1200px 700px at 15% 10%, rgba(255, 0, 153, .22), transparent 60%),
-    radial-gradient(900px 600px at 90% 25%, rgba(0, 255, 255, .18), transparent 60%),
-    radial-gradient(1000px 650px at 50% 95%, rgba(0, 255, 128, .14), transparent 60%),
-    linear-gradient(180deg, #0b1020 0%, #101b3a 100%);
-  color: #eef2ff;
+    radial-gradient(1100px 650px at 12% 12%, rgba(255, 203, 71, .18), transparent 60%),
+    radial-gradient(900px 550px at 88% 18%, rgba(50, 255, 200, .08), transparent 60%),
+    radial-gradient(1000px 700px at 50% 110%, rgba(255, 62, 132, .10), transparent 60%),
+    linear-gradient(180deg, #070611 0%, #0c0b1f 40%, #0a1128 100%);
+  color: #f6f2e8;
 }
 
-/* Reduce top padding */
-.block-container { padding-top: 1.5rem; padding-bottom: 3rem; }
+/* Container spacing */
+.block-container{ padding-top: 1.3rem; padding-bottom: 3rem; }
 
-/* Card */
-.gift-card {
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.06);
-  border-radius: 22px;
-  padding: 18px;
-  box-shadow: 0 18px 60px rgba(0,0,0,.55);
-  backdrop-filter: blur(10px);
-}
-
-/* Gradient title */
-.gradient-title {
-  font-size: 2.0rem;
-  font-weight: 800;
-  line-height: 1.15;
-  background: linear-gradient(90deg, #7c5cff, #22d3ee, #34d399, #ff4fd8);
+/* Crown title */
+.title{
+  font-size: 2.2rem;
+  font-weight: 900;
+  margin: 0.1rem 0 0.3rem 0;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #f7d36b, #ffd98e, #d8a93f, #f7d36b);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  margin: 0.2rem 0 0.4rem 0;
 }
 
-/* Subtitle */
-.subtle {
-  color: rgba(238,242,255,.78);
+/* Subtext */
+.subtle{
+  color: rgba(246, 242, 232, .78);
   margin-top: 0.2rem;
 }
 
-/* Section headers */
-.section {
-  letter-spacing: .14em;
+/* Section label */
+.section{
+  letter-spacing: .16em;
   text-transform: uppercase;
   font-size: .78rem;
-  color: rgba(238,242,255,.8);
-  margin: 0.8rem 0 0.2rem 0;
+  color: rgba(246, 242, 232, .80);
+  margin: 0.85rem 0 0.25rem 0;
+}
+
+/* Card */
+.card{
+  border: 1px solid rgba(255, 217, 142, .22);
+  background: rgba(10, 10, 22, .45);
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 0 18px 60px rgba(0,0,0,.60);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle “textile” vibe using layered diagonals */
+.card:before{
+  content:"";
+  position:absolute;
+  inset:-60px;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 217, 142, .055) 0px,
+      rgba(255, 217, 142, .055) 10px,
+      rgba(0,0,0,0) 10px,
+      rgba(0,0,0,0) 22px
+    );
+  opacity: .55;
+  pointer-events: none;
+  transform: rotate(0deg);
+}
+
+/* Highlight bar */
+.highlight{
+  border-left: 4px solid rgba(247, 211, 107, .95);
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 217, 142, .06);
 }
 
 /* Pills */
-.pill {
-  display: inline-block;
+.pill{
+  display:inline-block;
   padding: 6px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255, 217, 142, .22);
+  background: rgba(255, 217, 142, .06);
   margin: 4px 6px 0 0;
-  font-size: 0.85rem;
-}
-
-/* Highlight */
-.highlight {
-  border-left: 4px solid rgba(34,211,238,.85);
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: rgba(255,255,255,.04);
-  margin-top: 10px;
+  font-size: .86rem;
+  color: rgba(246, 242, 232, .92);
 }
 
 /* Buttons */
-.stButton>button {
+.stButton>button{
   border-radius: 16px !important;
-  padding: 0.65rem 0.9rem !important;
-  border: 1px solid rgba(255,255,255,.16) !important;
-  background: rgba(255,255,255,.08) !important;
-  color: #eef2ff !important;
-  transition: transform .12s ease, background .12s ease;
+  padding: 0.72rem 0.95rem !important;
+  border: 1px solid rgba(255, 217, 142, .28) !important;
+  background: rgba(255, 217, 142, .08) !important;
+  color: #f6f2e8 !important;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
 }
-.stButton>button:hover {
+.stButton>button:hover{
   transform: translateY(-1px);
-  background: rgba(255,255,255,.12) !important;
+  background: rgba(255, 217, 142, .12) !important;
+  border-color: rgba(255, 217, 142, .38) !important;
 }
 
-/* Primary action button wrapper */
-.primary-btn .stButton>button {
-  background: linear-gradient(90deg, rgba(124,92,255,.95), rgba(34,211,238,.85), rgba(255,79,216,.85)) !important;
+/* Primary button */
+.primary .stButton>button{
+  background: linear-gradient(90deg, rgba(247, 211, 107, .95), rgba(216, 169, 63, .95)) !important;
   border: none !important;
-  box-shadow: 0 14px 34px rgba(0,0,0,.35);
+  color: #1a1204 !important;
+  box-shadow: 0 14px 34px rgba(0,0,0,.45);
+}
+.primary .stButton>button:hover{
+  transform: translateY(-1px) scale(1.01);
+}
+
+/* Inputs */
+label, .stTextInput{
+  color: rgba(246, 242, 232, .90) !important;
 }
 </style>
         """,
@@ -152,161 +184,107 @@ def inject_css():
 inject_css()
 
 # ---------------------------
-# Session state
-# ---------------------------
-if "opened" not in st.session_state:
-    st.session_state.opened = False
-
-if "selected_name" not in st.session_state:
-    st.session_state.selected_name = "Alexandria"
-
-if "confetti" not in st.session_state:
-    st.session_state.confetti = True
-
-if "to_name" not in st.session_state:
-    st.session_state.to_name = "Alexandria & Simone"
-
-if "from_name" not in st.session_state:
-    st.session_state.from_name = "Desmond"
-
-# ---------------------------
 # Helpers
 # ---------------------------
-def confetti_block(lines=14):
-    emojis = ["🎉", "✨", "🎊", "💎", "🌈", "💫", "🧁", "🎈", "🍭", "🌟"]
-    out = []
-    for _ in range(lines):
-        out.append(" ".join(random.choice(emojis) for _ in range(random.randint(8, 16))))
-    return "\n".join(out)
+def regal_sparkle():
+    # lightweight “sparkle” lines to match the regal theme
+    if not st.session_state.sparkle:
+        return
+    emojis = ["✨", "👑", "🌟", "🟡", "🟨"]
+    lines = []
+    for _ in range(10):
+        lines.append(" ".join(random.choice(emojis) for _ in range(random.randint(10, 16))))
+    st.markdown(f"```text\n{chr(10).join(lines)}\n```")
 
-def show_confetti():
-    if st.session_state.confetti:
-        st.success("🎉 Gift opened!")
-        st.markdown(f"```text\n{confetti_block(12)}\n```")
 
-def card_open():
-    st.markdown('<div class="gift-card">', unsafe_allow_html=True)
+def open_card():
+    st.markdown('<div class="card">', unsafe_allow_html=True)
 
-def card_close():
+
+def close_card():
     st.markdown("</div>", unsafe_allow_html=True)
+
 
 # ---------------------------
 # Header
 # ---------------------------
-top_left, top_right = st.columns([0.7, 0.3])
-with top_left:
-    st.markdown('<div class="gradient-title">Name Gift</div>', unsafe_allow_html=True)
-    st.markdown(
-        '<div class="subtle">A colorful reveal for <b>Alexandria</b> & <b>Simone</b> 🎁</div>',
-        unsafe_allow_html=True,
-    )
-with top_right:
-    st.session_state.confetti = st.toggle("Confetti", value=st.session_state.confetti)
+left, right = st.columns([0.72, 0.28])
+with left:
+    st.markdown(f'<div class="title">👑 {ALEXANDRIA["title"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="subtle">{ALEXANDRIA["tagline"]}</div>', unsafe_allow_html=True)
+with right:
+    st.session_state.sparkle = st.toggle("Sparkle", value=st.session_state.sparkle)
 
 st.write("")
 
 # ---------------------------
-# Personalization (To / From)
+# Personalize
 # ---------------------------
 with st.expander("💌 Personalize (To / From)", expanded=False):
     st.session_state.to_name = st.text_input("To:", value=st.session_state.to_name)
     st.session_state.from_name = st.text_input("From:", value=st.session_state.from_name)
 
 # ---------------------------
-# Landing / Gift Gate
+# Gift gate
 # ---------------------------
 if not st.session_state.opened:
-    card_open()
-    st.markdown('<div class="section">A gift app</div>', unsafe_allow_html=True)
+    open_card()
+    st.markdown('<div class="section">Royal Gift</div>', unsafe_allow_html=True)
     st.markdown(
         f"""
 **To:** {st.session_state.to_name}  
-**From:** {st.session_state.from_name}
+**From:** {st.session_state.from_name}  
 
-Tap the button to open your gift, then choose a name to reveal its meanings, vibes, and message.
+A name is more than letters — it’s a **story**, a **crown**, a **calling**.
+Open your gift to reveal *Alexandria*.
 """
     )
 
-    st.markdown('<div class="primary-btn">', unsafe_allow_html=True)
-    if st.button("🎁 Open Gift", use_container_width=True):
+    st.markdown('<div class="primary">', unsafe_allow_html=True)
+    if st.button("Open the Gift ✨", use_container_width=True):
         st.session_state.opened = True
-        show_confetti()
-        time.sleep(0.15)
+        st.success("Gift opened 👑")
+        regal_sparkle()
+        time.sleep(0.12)
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-    st.caption("Tip: You can edit the messages inside app.py before sharing the link.")
-    card_close()
+    st.caption("Tip: Edit the message in app.py to make it personal before sharing.")
+    close_card()
 
 else:
     # ---------------------------
-    # Main app
+    # Reveal
     # ---------------------------
-    card_open()
-    st.markdown('<div class="section">Choose a name</div>', unsafe_allow_html=True)
+    open_card()
+    st.markdown('<div class="section">The Meaning</div>', unsafe_allow_html=True)
+    st.markdown(f"### {ALEXANDRIA['meaning']}")
 
-    names = list(DATA.keys())
-    default_index = names.index(st.session_state.selected_name) if st.session_state.selected_name in names else 0
+    st.markdown('<div class="section">Origin</div>', unsafe_allow_html=True)
+    st.write(ALEXANDRIA["origin"])
 
-    selected = st.radio(
-        "Which name would you like to reveal?",
-        options=names,
-        index=default_index,
-        horizontal=True,
-    )
-    st.session_state.selected_name = selected
+    st.markdown('<div class="section">Roots</div>', unsafe_allow_html=True)
+    st.write(ALEXANDRIA["roots"])
 
-    left, right = st.columns([0.6, 0.4])
-    with left:
-        if st.button(f"Reveal {selected} {DATA[selected]['emoji']}", use_container_width=True):
-            show_confetti()
-    with right:
-        if st.button("🔄 Reset Gift", use_container_width=True):
+    st.markdown('<div class="section">Themes</div>', unsafe_allow_html=True)
+    for t in ALEXANDRIA["themes"]:
+        st.write(f"• {t}")
+
+    st.markdown('<div class="section">Regal Vibe</div>', unsafe_allow_html=True)
+    for w in ALEXANDRIA["vibe_words"]:
+        st.markdown(f'<span class="pill">{w}</span>', unsafe_allow_html=True)
+
+    st.markdown('<div class="section">Gift Message</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="highlight">{ALEXANDRIA["gift_message"]}</div>', unsafe_allow_html=True)
+
+    st.write("")
+    c1, c2 = st.columns([0.6, 0.4])
+    with c1:
+        if st.button("Sparkle again ✨", use_container_width=True):
+            regal_sparkle()
+    with c2:
+        if st.button("Reset 🎁", use_container_width=True):
             st.session_state.opened = False
             st.rerun()
 
-    st.markdown("---")
-
-    d = DATA[selected]
-    st.markdown(f"## {d['emoji']} {selected}")
-    st.markdown(f"**To:** {st.session_state.to_name} &nbsp;&nbsp; | &nbsp;&nbsp; **From:** {st.session_state.from_name}")
-
-    c1, c2 = st.columns(2)
-    with c1:
-        st.markdown('<div class="section">Origin</div>', unsafe_allow_html=True)
-        st.write(d["origin"])
-        st.markdown('<div class="section">Core meaning</div>', unsafe_allow_html=True)
-        st.write(d["core"])
-    with c2:
-        st.markdown('<div class="section">Root / interpretation</div>', unsafe_allow_html=True)
-        st.write(d["root"])
-        st.markdown('<div class="section">Nicknames</div>', unsafe_allow_html=True)
-        st.write(", ".join(d["nicknames"]))
-
-    st.markdown('<div class="section">Vibe</div>', unsafe_allow_html=True)
-    for v in d["vibe"]:
-        st.markdown(f'<span class="pill">{v}</span>', unsafe_allow_html=True)
-
-    st.markdown('<div class="section">More meanings</div>', unsafe_allow_html=True)
-    for item in d["more"]:
-        st.write(f"• {item}")
-
-    st.markdown('<div class="section">Gift message</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="highlight">{d["gift"]}</div>', unsafe_allow_html=True)
-
-    st.caption("Want it more personal? Add one line about a memory or a compliment to make it hit harder.")
-    card_close()
-
-    st.write("")
-    with st.expander("🚀 Deploy this from GitHub (Streamlit Cloud)"):
-        st.markdown(
-            """
-1. Go to Streamlit Community Cloud  
-2. Click **New app**  
-3. Select your GitHub repo  
-4. Branch: **main**  
-5. Main file path: **app.py**  
-6. Click **Deploy** — share the `.streamlit.app` link
-"""
-        )
-
+    close_card()
