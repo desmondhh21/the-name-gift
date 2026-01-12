@@ -12,36 +12,62 @@ st.set_page_config(
 )
 
 # ---------------------------
-# Content (Alexandria only)
+# Deep, detailed meaning content (Alexandria only)
 # ---------------------------
+HIERO_STRIP = "𓂀 𓋹 𓆣 𓅓 𓇳 𓏤 𓍿 𓊹 𓎛 𓄿 𓇋 𓂋 𓈖 𓋴"
+
 ALEX = {
     "title": "Alexandria",
     "tagline": "A regal name. A timeless legacy.",
-    "meaning": "“Defender of people” / “protector of mankind.”",
-    "origin": "Greek (from Alexandros). The name also echoes the historic city of Alexandria — a symbol of knowledge and legacy.",
-    "roots": "Greek roots: alexein (“to defend”) + andros (“man/people”).",
+    "meaning_headline": "“Defender of people” / “protector of mankind.”",
+    "meaning_long": (
+        "Alexandria signifies a guardian-leader — one who protects people through wisdom, intellect, "
+        "and moral authority. It represents strength that shields, leadership that serves, and power "
+        "guided by responsibility rather than force."
+    ),
+    "linguistic": (
+        "The name traces to Greek roots: 'alexein' meaning “to defend, to ward off, to shield,” and "
+        "'andros' meaning “people / community.” Together, Alexandria implies “one who stands between "
+        "harm and the people.” It’s a name of vigilance, strategy, and collective responsibility."
+    ),
+    "historical": (
+        "The name also echoes the ancient African city of Alexandria in Egypt — a renowned center of "
+        "learning, scholarship, and cultural exchange. That association adds a second layer: intellectual "
+        "authority and a legacy of preserving wisdom for future generations."
+    ),
+    "african_context": (
+        "Through a Ghanaian (Akan) lens of leadership, true power is protection, wisdom before action, "
+        "and humility paired with strength. Alexandria fits naturally with these ideals: a name that "
+        "feels crowned with duty — not for display, but for service to the community."
+    ),
     "themes": [
-        "Protection & leadership",
-        "Wisdom & scholarship",
-        "Legacy & excellence",
-        "Grace under pressure",
+        "Protective leadership",
+        "Wisdom and intellect",
+        "Responsibility before power",
+        "Legacy and ancestral awareness",
+        "Strength guided by humility",
     ],
-    "vibe_words": ["Regal", "Wise", "Protective", "Magnetic", "Legacy-minded"],
-    "gift_message": (
-        "Alexandria — may your life be crowned with favor, your mind sharpened with wisdom, "
-        "and your path guarded by strength. 👑✨"
+    "vibe_words": [
+        "Regal",
+        "Wise",
+        "Protective",
+        "Grounded",
+        "Legacy-bearing",
+        "Magnetic",
+    ],
+    "royal_blessing": (
+        "Alexandria — may you walk crowned with wisdom, guarded by discernment, and strengthened by the "
+        "knowledge that your name carries protection, legacy, and honor. 👑✨"
     ),
 }
 
 ADINKRA = [
-    {"symbol": "🌀", "name": "Sankofa", "meaning": "Return and fetch it — learn from the past to build the future."},
-    {"symbol": "✨", "name": "Gye Nyame", "meaning": "Except for God — reverence, sovereignty, spiritual authority."},
-    {"symbol": "🦁", "name": "Akofena", "meaning": "War sword — courage, valor, and honorable strength."},
-    {"symbol": "🐏", "name": "Dwennimmen", "meaning": "Ram’s horns — strength with humility."},
-    {"symbol": "🏛️", "name": "Eban", "meaning": "Fence — safety, protection, and love of home."},
+    {"icon": "🌀", "name": "Sankofa", "meaning": "Return and fetch it — learn from the past to build the future."},
+    {"icon": "✨", "name": "Gye Nyame", "meaning": "Except for God — reverence, sovereignty, spiritual authority."},
+    {"icon": "🗡️", "name": "Akofena", "meaning": "War sword — courage guided by honor and discipline."},
+    {"icon": "🐏", "name": "Dwennimmen", "meaning": "Ram’s horns — strength with humility."},
+    {"icon": "🏠", "name": "Eban", "meaning": "Fence — protection of home, family, and community."},
 ]
-
-HIERO_STRIP = "𓂀 𓋹 𓆣 𓅓 𓇳 𓏤 𓍿 𓊹 𓎛 𓄿 𓇋 𓂋 𓈖 𓋴"
 
 # ---------------------------
 # Session state
@@ -57,25 +83,25 @@ if "sparkle" not in st.session_state:
 
 
 # ---------------------------
-# Styling (Fix cut-off + Ghanaian regal vibe)
+# Styling (fix cut-off + Ghanaian regal vibe)
 # ---------------------------
 def inject_css():
     st.markdown(
         """
 <style>
-/* ✅ FIX: add top padding so Streamlit header never overlaps content */
+/* ✅ Fix top cut-off: ensure content starts below Streamlit header */
 .block-container{
-  padding-top: 4.2rem !important;   /* was too small; this prevents cutoff */
+  padding-top: 4.6rem !important;
   padding-bottom: 3rem !important;
 }
 
-/* Optional: make Streamlit header blend with theme */
+/* Make the Streamlit header blend with theme */
 header[data-testid="stHeader"]{
   background: rgba(7, 6, 17, .55) !important;
   backdrop-filter: blur(10px);
 }
 
-/* App background */
+/* Background */
 .stApp{
   background:
     radial-gradient(1100px 650px at 12% 12%, rgba(255, 203, 71, .18), transparent 60%),
@@ -102,7 +128,7 @@ header[data-testid="stHeader"]{
   margin-top: 0.2rem;
 }
 
-/* Ghanaian kente-inspired band */
+/* Ghanaian kente-inspired header band */
 .kente-band{
   border-radius: 18px;
   padding: 12px 14px;
@@ -169,9 +195,10 @@ header[data-testid="stHeader"]{
   text-transform: uppercase;
   font-size: .78rem;
   color: rgba(246, 242, 232, .80);
-  margin: 0.85rem 0 0.25rem 0;
+  margin: 0.95rem 0 0.25rem 0;
 }
 
+/* Highlight */
 .highlight{
   border-left: 4px solid rgba(247, 211, 107, .95);
   padding: 10px 12px;
@@ -179,6 +206,7 @@ header[data-testid="stHeader"]{
   background: rgba(255, 217, 142, .06);
 }
 
+/* Pills */
 .pill{
   display:inline-block;
   padding: 6px 10px;
@@ -205,6 +233,7 @@ header[data-testid="stHeader"]{
   border-color: rgba(255, 217, 142, .38) !important;
 }
 
+/* Primary button */
 .primary .stButton>button{
   background: linear-gradient(90deg, rgba(247, 211, 107, .95), rgba(216, 169, 63, .95)) !important;
   border: none !important;
@@ -241,7 +270,7 @@ def close_card():
 
 
 # ---------------------------
-# Header band (Kente + Hieroglyphics)
+# Header
 # ---------------------------
 left, right = st.columns([0.72, 0.28])
 with left:
@@ -273,7 +302,7 @@ if not st.session_state.opened:
 **From:** {st.session_state.from_name}  
 
 A name is more than letters — it’s a **story**, a **crown**, a **calling**.  
-Open your gift to reveal *Alexandria* — with a Ghanaian-inspired royal touch.
+Open your gift to reveal the deeper meaning of *Alexandria* — regal, Ghanaian-centered, and timeless.
 """
     )
 
@@ -286,7 +315,7 @@ Open your gift to reveal *Alexandria* — with a Ghanaian-inspired royal touch.
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-    st.caption("Tip: You can customize the Adinkra section and blessing in app.py before sharing.")
+    st.caption("Tip: You can customize the blessing text in app.py before sharing the link.")
     close_card()
 
 else:
@@ -296,15 +325,19 @@ else:
     open_card()
 
     st.markdown('<div class="section">The Meaning</div>', unsafe_allow_html=True)
-    st.markdown(f"### {ALEX['meaning']}")
+    st.markdown(f"### {ALEX['meaning_headline']}")
+    st.write(ALEX["meaning_long"])
 
-    st.markdown('<div class="section">Origin</div>', unsafe_allow_html=True)
-    st.write(ALEX["origin"])
+    st.markdown('<div class="section">Linguistic Depth</div>', unsafe_allow_html=True)
+    st.write(ALEX["linguistic"])
 
-    st.markdown('<div class="section">Roots</div>', unsafe_allow_html=True)
-    st.write(ALEX["roots"])
+    st.markdown('<div class="section">Historical Legacy</div>', unsafe_allow_html=True)
+    st.write(ALEX["historical"])
 
-    st.markdown('<div class="section">Themes</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section">African-Centered Interpretation</div>', unsafe_allow_html=True)
+    st.write(ALEX["african_context"])
+
+    st.markdown('<div class="section">Core Themes</div>', unsafe_allow_html=True)
     for t in ALEX["themes"]:
         st.write(f"• {t}")
 
@@ -312,15 +345,13 @@ else:
     for w in ALEX["vibe_words"]:
         st.markdown(f'<span class="pill">{w}</span>', unsafe_allow_html=True)
 
-    st.markdown('<div class="section">Ghanaian Centered Symbols</div>', unsafe_allow_html=True)
-    st.write("A few Adinkra-inspired principles to crown the name with meaning:")
+    st.markdown('<div class="section">Ghanaian Symbolism (Adinkra-inspired)</div>', unsafe_allow_html=True)
+    st.write("These principles reflect noble leadership — protection, wisdom, humility, and legacy:")
     for item in ADINKRA:
-        st.markdown(
-            f"**{item['symbol']} {item['name']}** — {item['meaning']}"
-        )
+        st.markdown(f"**{item['icon']} {item['name']}** — {item['meaning']}")
 
     st.markdown('<div class="section">Royal Blessing</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="highlight">{ALEX["gift_message"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="highlight">{ALEX["royal_blessing"]}</div>', unsafe_allow_html=True)
 
     st.write("")
     c1, c2 = st.columns([0.6, 0.4])
