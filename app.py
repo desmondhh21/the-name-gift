@@ -14,7 +14,7 @@ st.set_page_config(
 # ---------------------------
 # Content (Alexandria only)
 # ---------------------------
-ALEXANDRIA = {
+ALEX = {
     "title": "Alexandria",
     "tagline": "A regal name. A timeless legacy.",
     "meaning": "“Defender of people” / “protector of mankind.”",
@@ -33,30 +33,49 @@ ALEXANDRIA = {
     ),
 }
 
+ADINKRA = [
+    {"symbol": "🌀", "name": "Sankofa", "meaning": "Return and fetch it — learn from the past to build the future."},
+    {"symbol": "✨", "name": "Gye Nyame", "meaning": "Except for God — reverence, sovereignty, spiritual authority."},
+    {"symbol": "🦁", "name": "Akofena", "meaning": "War sword — courage, valor, and honorable strength."},
+    {"symbol": "🐏", "name": "Dwennimmen", "meaning": "Ram’s horns — strength with humility."},
+    {"symbol": "🏛️", "name": "Eban", "meaning": "Fence — safety, protection, and love of home."},
+]
+
+HIERO_STRIP = "𓂀 𓋹 𓆣 𓅓 𓇳 𓏤 𓍿 𓊹 𓎛 𓄿 𓇋 𓂋 𓈖 𓋴"
+
 # ---------------------------
 # Session state
 # ---------------------------
 if "opened" not in st.session_state:
     st.session_state.opened = False
-
 if "to_name" not in st.session_state:
     st.session_state.to_name = "Alexandria"
-
 if "from_name" not in st.session_state:
     st.session_state.from_name = "Desmond"
-
 if "sparkle" not in st.session_state:
     st.session_state.sparkle = True
 
 
 # ---------------------------
-# Styling (African-themed + regal)
+# Styling (Fix cut-off + Ghanaian regal vibe)
 # ---------------------------
 def inject_css():
     st.markdown(
         """
 <style>
-/* Regal African-inspired palette + subtle pattern vibe */
+/* ✅ FIX: add top padding so Streamlit header never overlaps content */
+.block-container{
+  padding-top: 4.2rem !important;   /* was too small; this prevents cutoff */
+  padding-bottom: 3rem !important;
+}
+
+/* Optional: make Streamlit header blend with theme */
+header[data-testid="stHeader"]{
+  background: rgba(7, 6, 17, .55) !important;
+  backdrop-filter: blur(10px);
+}
+
+/* App background */
 .stApp{
   background:
     radial-gradient(1100px 650px at 12% 12%, rgba(255, 203, 71, .18), transparent 60%),
@@ -66,14 +85,11 @@ def inject_css():
   color: #f6f2e8;
 }
 
-/* Container spacing */
-.block-container{ padding-top: 1.3rem; padding-bottom: 3rem; }
-
-/* Crown title */
+/* Title */
 .title{
-  font-size: 2.2rem;
+  font-size: 2.35rem;
   font-weight: 900;
-  margin: 0.1rem 0 0.3rem 0;
+  margin: 0.2rem 0 0.2rem 0;
   letter-spacing: 0.5px;
   background: linear-gradient(90deg, #f7d36b, #ffd98e, #d8a93f, #f7d36b);
   -webkit-background-clip: text;
@@ -81,19 +97,43 @@ def inject_css():
   color: transparent;
 }
 
-/* Subtext */
 .subtle{
   color: rgba(246, 242, 232, .78);
   margin-top: 0.2rem;
 }
 
-/* Section label */
-.section{
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  font-size: .78rem;
-  color: rgba(246, 242, 232, .80);
-  margin: 0.85rem 0 0.25rem 0;
+/* Ghanaian kente-inspired band */
+.kente-band{
+  border-radius: 18px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 217, 142, .22);
+  background:
+    linear-gradient(90deg, rgba(247,211,107,.20), rgba(0,0,0,0)),
+    repeating-linear-gradient(
+      135deg,
+      rgba(247,211,107,.22) 0px,
+      rgba(247,211,107,.22) 10px,
+      rgba(255,62,132,.14) 10px,
+      rgba(255,62,132,.14) 20px,
+      rgba(50,255,200,.12) 20px,
+      rgba(50,255,200,.12) 30px,
+      rgba(0,0,0,0) 30px,
+      rgba(0,0,0,0) 42px
+    );
+  box-shadow: 0 14px 44px rgba(0,0,0,.45);
+}
+
+/* Hieroglyph strip */
+.hiero{
+  margin-top: 10px;
+  font-size: 1.05rem;
+  letter-spacing: .20em;
+  color: rgba(255, 217, 142, .85);
+  text-align: center;
+  padding: 10px 10px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 217, 142, .18);
+  background: rgba(255, 217, 142, .05);
 }
 
 /* Card */
@@ -108,7 +148,6 @@ def inject_css():
   overflow: hidden;
 }
 
-/* Subtle “textile” vibe using layered diagonals */
 .card:before{
   content:"";
   position:absolute;
@@ -123,10 +162,16 @@ def inject_css():
     );
   opacity: .55;
   pointer-events: none;
-  transform: rotate(0deg);
 }
 
-/* Highlight bar */
+.section{
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: .78rem;
+  color: rgba(246, 242, 232, .80);
+  margin: 0.85rem 0 0.25rem 0;
+}
+
 .highlight{
   border-left: 4px solid rgba(247, 211, 107, .95);
   padding: 10px 12px;
@@ -134,7 +179,6 @@ def inject_css():
   background: rgba(255, 217, 142, .06);
 }
 
-/* Pills */
 .pill{
   display:inline-block;
   padding: 6px 10px;
@@ -161,7 +205,6 @@ def inject_css():
   border-color: rgba(255, 217, 142, .38) !important;
 }
 
-/* Primary button */
 .primary .stButton>button{
   background: linear-gradient(90deg, rgba(247, 211, 107, .95), rgba(216, 169, 63, .95)) !important;
   border: none !important;
@@ -170,11 +213,6 @@ def inject_css():
 }
 .primary .stButton>button:hover{
   transform: translateY(-1px) scale(1.01);
-}
-
-/* Inputs */
-label, .stTextInput{
-  color: rgba(246, 242, 232, .90) !important;
 }
 </style>
         """,
@@ -187,7 +225,6 @@ inject_css()
 # Helpers
 # ---------------------------
 def regal_sparkle():
-    # lightweight “sparkle” lines to match the regal theme
     if not st.session_state.sparkle:
         return
     emojis = ["✨", "👑", "🌟", "🟡", "🟨"]
@@ -196,25 +233,25 @@ def regal_sparkle():
         lines.append(" ".join(random.choice(emojis) for _ in range(random.randint(10, 16))))
     st.markdown(f"```text\n{chr(10).join(lines)}\n```")
 
-
 def open_card():
     st.markdown('<div class="card">', unsafe_allow_html=True)
-
 
 def close_card():
     st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ---------------------------
-# Header
+# Header band (Kente + Hieroglyphics)
 # ---------------------------
 left, right = st.columns([0.72, 0.28])
 with left:
-    st.markdown(f'<div class="title">👑 {ALEXANDRIA["title"]}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="subtle">{ALEXANDRIA["tagline"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="title">👑 {ALEX["title"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="subtle">{ALEX["tagline"]}</div>', unsafe_allow_html=True)
 with right:
     st.session_state.sparkle = st.toggle("Sparkle", value=st.session_state.sparkle)
 
+st.markdown('<div class="kente-band"></div>', unsafe_allow_html=True)
+st.markdown(f'<div class="hiero">{HIERO_STRIP}</div>', unsafe_allow_html=True)
 st.write("")
 
 # ---------------------------
@@ -235,8 +272,8 @@ if not st.session_state.opened:
 **To:** {st.session_state.to_name}  
 **From:** {st.session_state.from_name}  
 
-A name is more than letters — it’s a **story**, a **crown**, a **calling**.
-Open your gift to reveal *Alexandria*.
+A name is more than letters — it’s a **story**, a **crown**, a **calling**.  
+Open your gift to reveal *Alexandria* — with a Ghanaian-inspired royal touch.
 """
     )
 
@@ -249,7 +286,7 @@ Open your gift to reveal *Alexandria*.
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-    st.caption("Tip: Edit the message in app.py to make it personal before sharing.")
+    st.caption("Tip: You can customize the Adinkra section and blessing in app.py before sharing.")
     close_card()
 
 else:
@@ -257,25 +294,33 @@ else:
     # Reveal
     # ---------------------------
     open_card()
+
     st.markdown('<div class="section">The Meaning</div>', unsafe_allow_html=True)
-    st.markdown(f"### {ALEXANDRIA['meaning']}")
+    st.markdown(f"### {ALEX['meaning']}")
 
     st.markdown('<div class="section">Origin</div>', unsafe_allow_html=True)
-    st.write(ALEXANDRIA["origin"])
+    st.write(ALEX["origin"])
 
     st.markdown('<div class="section">Roots</div>', unsafe_allow_html=True)
-    st.write(ALEXANDRIA["roots"])
+    st.write(ALEX["roots"])
 
     st.markdown('<div class="section">Themes</div>', unsafe_allow_html=True)
-    for t in ALEXANDRIA["themes"]:
+    for t in ALEX["themes"]:
         st.write(f"• {t}")
 
     st.markdown('<div class="section">Regal Vibe</div>', unsafe_allow_html=True)
-    for w in ALEXANDRIA["vibe_words"]:
+    for w in ALEX["vibe_words"]:
         st.markdown(f'<span class="pill">{w}</span>', unsafe_allow_html=True)
 
-    st.markdown('<div class="section">Gift Message</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="highlight">{ALEXANDRIA["gift_message"]}</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section">Ghanaian Centered Symbols</div>', unsafe_allow_html=True)
+    st.write("A few Adinkra-inspired principles to crown the name with meaning:")
+    for item in ADINKRA:
+        st.markdown(
+            f"**{item['symbol']} {item['name']}** — {item['meaning']}"
+        )
+
+    st.markdown('<div class="section">Royal Blessing</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="highlight">{ALEX["gift_message"]}</div>', unsafe_allow_html=True)
 
     st.write("")
     c1, c2 = st.columns([0.6, 0.4])
